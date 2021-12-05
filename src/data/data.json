@@ -1,0 +1,27 @@
+{
+    "puzzles": [
+        {
+            "id": "1",
+            "name": "1-8",
+            "maxScore": 100,
+            "scoreType": "timed",
+            "solutionType": "text",
+            "next": "2",
+            "content": [
+                { 
+                    "name": "Puzzle 1a",
+                    "title": "Welcome to the Manger",
+                    "content": "It is night time in Bethlehem, Judea in the year 4 BC. You finally sent your guests off and put the gifts aside. You are tired after a long day of travelling and delivering your newborn baby, Jesus. Your wife, Mary is sleeping in a cozy corner among the stacks of hay. After seeing your baby sleeping well in the manger, you carefully lay beside your wife so as to not wake her up. Slowly, you fall into a deep sleep.",
+                    "image": "manger.jpg"
+                },
+                { 
+                    "name": "Puzzle 1b",
+                    "title": "Angel appears to Joseph",
+                    "content": "\"Joseph.\" Suddenly, you hear your name. You continue sleeping. \"JOSEPH!!!!!!!\" The voice gets louder and you wake up immediately. You look around and your eyes shut immediately. The light was so bright that you could not figure out who was calling you. You hear him saying, \"I am the angel of the LORD, I have a message for you.\" You are trying your best to hear him and at the same time trying to fight off your sleep. The angel sees that you are not listening. The angel gives you a pouch and tells you there is no time to waste. The angel disappears immediately before you can ask any questions. You open the pouch and find a bunch of puzzles. Click on the link (below) to solve the puzzle and find the hidden word.",
+                    "image": "manger.jpg"
+                }
+            ]
+
+        }
+    ]
+}
