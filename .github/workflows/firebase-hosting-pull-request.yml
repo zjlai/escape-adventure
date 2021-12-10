@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: >-
-          yarn install --immutable --immutable-cache --check-cache && quasar
+          rm -rf node_modules && yarn install --frozen-lockfile && quasar
           build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
