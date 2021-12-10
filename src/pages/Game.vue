@@ -12,6 +12,7 @@ import { defineComponent, computed } from 'vue'
 import GameTitle from 'src/components/game/title.vue'
 import StoryCarousel from 'src/components/game/storyCarousel.vue'
 import { useRoute } from 'vue-router'
+// import { apiService } from 'src/apis/prismicApis'
 
 export default defineComponent({
   name: 'GamePage',
@@ -23,6 +24,7 @@ export default defineComponent({
     const route = useRoute()
     return {
       gameId: computed(() => route.params.puzzleId)
+      // puzzle: computed(() => puzzle)
     }
   }
 })
