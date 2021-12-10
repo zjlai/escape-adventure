@@ -13,9 +13,7 @@
       position="center"
       width="70%"
     />
-    <div class="q-mt-md text-center">
-      {{content}}
-    </div>
+    <div class="q-mt-md text-center" v-html="content" />
   </q-carousel-slide>
 </template>
 
@@ -41,8 +39,9 @@ export default defineComponent({
       type: String
     }
   },
-  setup() {
+  setup(props) {
     const section = ref('')
+    console.log(props)
     return {
       section
     }
