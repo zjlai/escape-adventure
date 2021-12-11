@@ -8,10 +8,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import GameTitle from 'src/components/game/title.vue'
 import StoryCarousel from 'src/components/game/storyCarousel.vue'
 import { useRoute } from 'vue-router'
+import { createGame } from 'src/apis/firebaseApis'
 // import { apiService } from 'src/apis/prismicApis'
 
 export default defineComponent({
@@ -22,6 +23,11 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute()
+    onMounted(async () => {
+      console.log('data')
+      const data = await createGame({ teamName: 'TestAPI'})
+      console.log(data)
+    })
     return {
       gameId: computed(() => route.params.puzzleId)
       // puzzle: computed(() => puzzle)
