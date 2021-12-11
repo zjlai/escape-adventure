@@ -15,6 +15,12 @@ const routes: RouteRecordRaw[] = [
       { path: ':puzzleId', component: () => import('pages/Game.vue')}
     ]
   },
+  {
+    name: 'register',
+    path: '/register',
+    component: () => import('layouts/RegisterLayout.vue'),
+    children: [{ path: '', component: () => import('pages/Register.vue') }],
+  },
 
   // Always leave this as last one,
   // but you can also remove it
