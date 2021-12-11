@@ -5,6 +5,12 @@
     <div class="col text-center">
         <q-input v-model="text" label="Team Name" />
         <q-input v-model="text" label="Email (one email would do)" />
+        <br>
+        <q-btn
+            label="Submit"
+            color="purple"
+            dark
+        />
     </div>
     <div class="col text-center">
     </div>
