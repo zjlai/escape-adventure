@@ -1,4 +1,4 @@
-export interface gameInterface {
+interface gameInterface {
   avatar: string;
   email: string;
   endTime: Date;
@@ -19,3 +19,23 @@ export interface gameInterface {
     totalScore: number;
   }[]
 }
+
+interface puzzleInterface {
+  title: string;
+  solutionType: string;
+  prev: string;
+  content: {
+    title:string;
+    layout: string;
+    media: {
+      layoutField: string;
+      type: string;
+      url: string;
+    }[]
+  }
+}
+
+export {
+  gameInterface,
+  puzzleInterface,
+};
