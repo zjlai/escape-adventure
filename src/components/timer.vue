@@ -26,7 +26,7 @@ export default defineComponent({
     const timer = ref(0)
     const { pad } = format
 
-    let timerInterval
+    let timerInterval: NodeJS.Timeout
 
     onMounted(() => {
       timerInterval = setInterval(() => {
@@ -41,7 +41,7 @@ export default defineComponent({
     const formatTimer = (time: number) => {
       const mins = Math.floor(time/60)
       const secs = time % 60
-      return `${pad(mins, 2)}:${pad(secs, 2)}`
+      return `${pad(mins.toString(), 2)}:${pad(secs.toString(), 2)}`
     }
     return {
       time: computed(() => formatTimer(timer.value))
