@@ -5,6 +5,7 @@ import {gameInterface} from "./index.d";
 // Constants
 const GAME_COLLECTION = "games";
 const START_PUZZLE = "Ya4e3BMAAC8A2VrQ";
+const PUZZLE_COLLECTION = "puzzles";
 
 // Init App and Firestore
 const app = initializeApp();
@@ -22,4 +23,23 @@ export const createTeam = functions
       return {
         startPuzzle: START_PUZZLE,
       };
+    });
+
+
+export const getPuzzle = functions
+    .region("asia-northeast1")
+    .https
+    .onCall(async (puzzleId: string) => {
+      // log incoming data
+      functions.logger.info(`puzzleId: ${puzzleId}`);
+
+      // read from firestore
+      const docRef = db.collection(PUZZLE_COLLECTION).doc(puzzleId);
+      const docSnap = await docRef.get();
+
+      if (docSnap.exists) {
+        const document = docSnap.data();
+        return document;
+      }
+      throw new functions.https.HttpsError("not-found", "Puzzle not found.");
     });

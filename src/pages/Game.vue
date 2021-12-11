@@ -12,8 +12,7 @@ import { defineComponent, computed } from 'vue'
 import GameTitle from 'src/components/game/title.vue'
 import StoryCarousel from 'src/components/game/storyCarousel.vue'
 import { useRoute } from 'vue-router'
-// import { createGame } from 'src/apis/firebaseApis'
-// import { apiService } from 'src/apis/prismicApis'
+// import { getPuzzle } from 'src/apis/firebaseApis'
 
 export default defineComponent({
   name: 'GamePage',
@@ -25,9 +24,9 @@ export default defineComponent({
     const route = useRoute()
     // Reference Code
     // onMounted(async () => {
-      // console.log('data')
-      // const data = await createGame({ teamName: 'TestAPI'})
-      // console.log(data)
+    //   console.log('data')
+    //   const data = await getPuzzle(route.params.puzzleId)
+    //   console.log(data.data)
     // })
     return {
       gameId: computed(() => route.params.puzzleId)
