@@ -32,3 +32,16 @@ export interface puzzleInterface {
         }[];
     }
 }
+
+export interface HintsInterface {
+    hintRef: string;
+    totalHints: number;
+    puzzleRef: string;
+    penalties: number[];
+}
+
+export interface HintInterface {
+    hint: string;
+    level: number;
+    penalty: number;
+}
