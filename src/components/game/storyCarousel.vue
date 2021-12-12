@@ -36,7 +36,6 @@ import textAnswer from 'src/components/game/solutions/textAns.vue'
 // import { dataService } from 'src/services/dataService'
 // import { puzzleInterface } from 'src/index'
 // import { apiService } from 'src/apis/prismicApis'
-import { usePrismic } from '@prismicio/vue';
 import { puzzleInterface } from 'src/index'
 
 export default defineComponent({
@@ -55,13 +54,13 @@ export default defineComponent({
     const section = ref('')
     const puzzle = ref(<puzzleInterface | null>null)
     // const { getPuzzle } = dataService()
-    const { client } = usePrismic();
     console.log(props.id)
     // const puzzlePrismic = getPuzzle(props.id)
 
-    onMounted(async() => {
-      puzzle.value = await client.getByID(props.id) as unknown as puzzleInterface
-      section.value = puzzle.value.data.content[0].name
+    onMounted(() => {
+      // puzzle.value = await client.getByID(props.id) as unknown as puzzleInterface
+      // section.value = puzzle.value.data.content[0].name
+      console.log('mount game')
     })
     // onMounted(() => {
     //   puzzle.value = getPuzzle(props.id) as puzzleInterface
