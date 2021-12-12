@@ -8,11 +8,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import GameTitle from 'src/components/game/title.vue'
 import StoryCarousel from 'src/components/game/storyCarousel.vue'
 import { useRoute } from 'vue-router'
-// import { getPuzzle } from 'src/apis/firebaseApis'
+import { getPuzzle } from 'src/apis/firebaseApis'
 
 export default defineComponent({
   name: 'GamePage',
@@ -23,11 +23,11 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     // Reference Code
-    // onMounted(async () => {
-    //   console.log('data')
-    //   const data = await getPuzzle(route.params.puzzleId)
-    //   console.log(data.data)
-    // })
+    onMounted(async () => {
+      console.log('data')
+      const data = await getPuzzle(route.params.puzzleId)
+      console.log(data.data)
+    })
     return {
       gameId: computed(() => route.params.puzzleId)
       // puzzle: computed(() => puzzle)

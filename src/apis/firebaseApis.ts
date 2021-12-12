@@ -3,7 +3,7 @@ import { app } from 'src/boot/firebase'
 
 const functions = getFunctions(app, 'asia-northeast1')
 
-const createGame = httpsCallable(functions, 'createTeam')
+const createGame = httpsCallable(functions, 'createGame')
 const getPuzzle = httpsCallable(functions, 'getPuzzle')
 export {
   createGame,
