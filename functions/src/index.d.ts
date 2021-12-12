@@ -31,8 +31,8 @@ interface puzzleInterface {
       layoutField: string;
       type: string;
       url: string;
-    }[]
-  }
+    }[];
+  };
 }
 
 export {

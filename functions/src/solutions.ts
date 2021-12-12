@@ -1,28 +1,25 @@
-const functions = require('firebase-functions');
-import { fn, db } from "./index";
+import {fn, logger, ERROR} from "./firebaseInit";
+import {getFirestore} from "firebase-admin/firestore";
 
 // Constants
 const GAME_SOLUTIONS = "solutions";
-
+const db = getFirestore();
 
 export const getSolutions = fn
     .https
     .onCall(async (data: string) => {
-
       // log incoming data
-      functions.logger.info(data);
+      logger.info(data);
 
       // get data from firestore
-      const doc = await db.collection(GAME_SOLUTIONS).doc(data).get();
-      if (!doc.exists) {
-        console.log('No such document!');
+      const docRef = db.collection(GAME_SOLUTIONS).doc(data);
+      const docSnap = await docRef.get();
+      if (!docSnap.exists) {
+        throw new ERROR("not-found", "Solution not found.");
       } else {
-        console.log('Document data:', doc);
+        console.log("Document data:", docSnap.data());
       }
-      
       return {
-        solutions: doc.data(),
+        solutions: docSnap.data(),
       };
-
     });
-  
