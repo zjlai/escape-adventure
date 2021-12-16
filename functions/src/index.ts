@@ -1,14 +1,13 @@
 import * as functions from "firebase-functions";
 import {initializeApp, firestore} from "firebase-admin";
-<<<<<<< HEAD
-=======
-import {gameInterface} from "./index.d";
+// import {gameInterface} from "./index.d";
 
 // Constants
 const GAME_COLLECTION = "games";
 const START_PUZZLE = "Ya4e3BMAAC8A2VrQ";
 const PUZZLE_COLLECTION = "puzzles";
->>>>>>> acae125bc765977f050e84fb7a6aadd2133caed1
+
+console.log(GAME_COLLECTION + START_PUZZLE + PUZZLE_COLLECTION);
 
 // Init App and Firestore
 const app = initializeApp();
