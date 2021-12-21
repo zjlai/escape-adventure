@@ -8,6 +8,7 @@
       padding
       arrows
       navigation
+      navigation-icon="radio_button_unchecked"
       v-model="section"
       control-color="black"
       control-text-color="black"
@@ -16,33 +17,38 @@
       v-if="puzzle"
     >
       <story-slide
-        v-for="slide in puzzle.data.content"
-        :key="slide.name"
-        :name="slide.name"
-        :title="slide['content-title'][0].text"
-        :src="slide.image.url"
-        :content="slide['content-content'][0].text"
+        v-for="slide in puzzle.storyblocks"
+        :key="slide.title"
+        :name="slide.title"
+        :title="slide.title"
+        :src="slide.image"
+        :content="slide.text"
         class="column no-wrap flex-center fit"
       />
     </q-carousel>
-    <text-answer v-if="puzzle && puzzle.data.solutiontype === 'text'" :id="id" />
+    <!-- <text-answer v-if="puzzle && puzzle.data.solutiontype === 'text'" :id="id" /> -->
+    <action-button
+      v-if="section === lastStory"
+      :contentType="puzzle.contentType"
+      :next="puzzle.next"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref , onMounted } from 'vue'
 import StorySlide from 'src/components/game/storySlide.vue'
-import textAnswer from 'src/components/game/solutions/textAns.vue'
-// import { dataService } from 'src/services/dataService'
-// import { puzzleInterface } from 'src/index'
-// import { apiService } from 'src/apis/prismicApis'
+import ActionButton from 'src/components/game/actionBtn.vue'
+// import textAnswer from 'src/components/game/solutions/textAns.vue'
+import { getContent } from 'src/apis/firebaseApis'
 import { puzzleInterface } from 'src/index'
 
 export default defineComponent({
   name: 'StoryCarousel',
   components: {
     StorySlide,
-    textAnswer
+    ActionButton
+    // textAnswer
   },
   props: {
     id: {
@@ -52,15 +58,16 @@ export default defineComponent({
   },
   setup(props) {
     const section = ref('')
-    const puzzle = ref(<puzzleInterface | null>null)
-    // const { getPuzzle } = dataService()
+    const lastStory = ref('')
+    const puzzle = ref(<puzzleInterface>{})
     console.log(props.id)
-    // const puzzlePrismic = getPuzzle(props.id)
 
-    onMounted(() => {
-      // puzzle.value = await client.getByID(props.id) as unknown as puzzleInterface
-      // section.value = puzzle.value.data.content[0].name
-      console.log('mount game')
+    onMounted(async () => {
+      const data = await getContent(props.id)
+      console.log(data)
+      puzzle.value = data.data as puzzleInterface
+      section.value = puzzle.value.storyblocks[0].title
+      lastStory.value = puzzle.value.storyblocks[puzzle.value.storyblocks.length - 1].title
     })
     // onMounted(() => {
     //   puzzle.value = getPuzzle(props.id) as puzzleInterface
@@ -69,8 +76,8 @@ export default defineComponent({
     // })
     return {
       section,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      puzzle
+      puzzle,
+      lastStory
     }
   }
 })

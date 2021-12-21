@@ -34,9 +34,6 @@ export default defineComponent({
     },
     content: {
       type: String
-    },
-    solutionType: {
-      type: String
     }
   },
   setup(props) {
