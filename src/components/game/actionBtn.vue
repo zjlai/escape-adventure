@@ -24,7 +24,7 @@ export default defineComponent({
     const go = async () => {
       // validate answer
       if (props.contentType === 'narrative') {
-        await router.push( { name: 'game', param: { storyRef: 'UEqZ4e9YemsYbVygmcj7'}})
+        await router.push( { name: 'game', params: { storyRef: 'UEqZ4e9YemsYbVygmcj7'}})
       }
     }
     return {
