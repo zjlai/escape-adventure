@@ -31,11 +31,24 @@ interface puzzleInterface {
       layoutField: string;
       type: string;
       url: string;
-    }[]
-  }
+    }[];
+  };
+}
+
+interface hintInterface {
+  puzzleRef?: string;
+  hintRef?: string;
+  hintLevel?: number;
+}
+
+interface hintsResponseInterface {
+  hintId: string;
+  totalHints: number;
 }
 
 export {
   gameInterface,
   puzzleInterface,
+  hintInterface,
+  hintsResponseInterface,
 };

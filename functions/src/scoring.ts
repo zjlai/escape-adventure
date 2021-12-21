@@ -1,9 +1,7 @@
-const functions = require('firebase-functions');
 import { firestore } from "firebase-admin";
-import { fn, db } from "./index";
+import {fn, db, logger, ERROR} from "./index";
 import { scoringInterface, scoringGeoInterface } from "./scoring.d";
-const geofire = require("geofire-common");
-
+import * as geofire from "geofire-common";
 /* scoringText - Test scripts for firebase functions:shell
 CORRECT ANSWER (PERFECT SCORE)
 scoringText({gameId: 'Zmbfcdc5yzfoetZr85Ro', puzzleRef: 'puzzleRef', hintsPenalty: 0, answer: '10', hintsUsed: 0, timeTaken: 40})
@@ -22,118 +20,98 @@ scoringText({gameId: 'Zmbfcdc5yzfoetZr85Ro', puzzleRef: 'puzzleRef', hintsPenalt
 const GAME_SOLUTIONS = "solutions";
 const GAME_COLLECTION = "games";
 
-export const scoringText = fn
+export const scoreAnswer = fn
     .https
     .onCall(async (data: scoringInterface) => {
       // log incoming data
-      functions.logger.info(data);
+      logger.info(data);
 
       // get game session data from firestore
-      const game = await db.collection(GAME_COLLECTION).doc(data.gameId).get();
+      const gameRef = db.collection(GAME_COLLECTION).doc(data.gameId);
+      const game = await gameRef.get();
+
       if (!game.exists) {
-        console.log('Game Id not found');
-        return {
-          error: 'Game Id not found'
-        }
+        console.log("Game Id not found");
+        throw new ERROR("not-found", "Game not found.");
       }
-      
-      // Get solutions/puzzle data      
-      var answer = "";
-      var maxScore = 0;
-      //var minScore = 0;
-      var maxTime = 0;
-      var minTime = 0;
-      var next = "";
-      var timed = false;
-      var solutionType = "";
-      await db.collection(GAME_SOLUTIONS).where("puzzleRef", "==", data.puzzleRef).get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          answer = doc.get('answer');
-          maxScore = doc.get('maxScore');
-          //minScore = doc.get('minScore');
-          maxTime = doc.get('maxTime');
-          minTime = doc.get('minTime');
-          next = doc.get('next')
-          timed = doc.get('timed')
-          solutionType = doc.get('solutionType')
-        })
-      })
-    
+
+      console.log("Current total score: " + game.get("totalScore"));
+
+      const query = db.collection(GAME_SOLUTIONS).where("puzzleRef", "==", data.puzzleRef);
+      const solutionSnapshot = await query.get();
+      const solution = solutionSnapshot.docs[0].data();
+
       // initialize Scoring
-      var score = 0;
+      let score = 0;
 
       // check for correct answer (to move this into a separate module later, e.g., if boolean answer = true then proceed)
-      console.log ("Checking for the correct answer => " + data.answer + " is equals to " + answer);
-
-      var correctAnswer = false;
-      if(data.answer == answer)
-        correctAnswer = true;
-
-      if(correctAnswer) {
-        
+      console.log("Checking for the correct answer => " + data.answer + " is equals to " + solution.answer);
+      if (data.answer == solution.answer) {
         // fractionalize score by time taken, where
         // if timeTaken <= minTime = 100%
         // if timeTaken > maxTime = 0%
         // else (maxTime - timeTaken) / (maxTime - minTime)
-        var timePercent = 0;
-        if(timed) {
-          if(data.timeTaken <= minTime) {
-            timePercent = 1
-          } else if (data.timeTaken >= maxTime) {
-            timePercent = 0
+        let timePercent = 0;
+        if (solution.timed) {
+          if (data.timeTaken <= solution.minTime) {
+            timePercent = 1;
+          } else if (data.timeTaken >= solution.maxTime) {
+            timePercent = 0;
           } else {
-            timePercent = (maxTime - data.timeTaken) / (maxTime - minTime)
+            timePercent = (solution.maxTime - data.timeTaken) / (solution.maxTime - solution.minTime);
           }
-          
-          score = timePercent * maxScore;
+          score = timePercent * solution.maxScore;
         }
 
         // retain rawScore before penalization
-        var rawScore = score;
-        
+        const rawScore = score;
+
         // subtract hints used from score
         score = score - data.hintsPenalty;
 
-        // compute overall total score 
-        var overallTotalScore = game.get('totalScore') + score;
+        // compute overall total score
+        const overallTotalScore = game.get("totalScore") + score;
 
-        // update game record and add gameData/score record {gameData > answer, hintsPenalty, hintsUsed, puzzle, rawScore, solutionsType, time}                
-        await db.collection(GAME_COLLECTION).doc(data.gameId).update({
+        // update gameData object
+        // const currentGameData = game.get('gameData');
+        // currentGameData.
+        // console.log("Game data: " + );
+        // update game record and add gameData/score record {gameData > answer, hintsPenalty, hintsUsed, puzzle, rawScore, solutionsType, time}
+
+        await gameRef.update({
           gameData: firestore.FieldValue.arrayUnion({
             answer: data.answer,
             hintsPenalty: data.hintsPenalty,
             hintsUsed: data.hintsUsed,
             puzzle: data.puzzleRef,
             rawScore: rawScore,
-            solutionType: solutionType,
+            solutionType: solution.solutionType,
             time: data.timeTaken,
-            totalScore: score
+            totalScore: score,
           }),
-          stage: next,
-          totalScore: overallTotalScore
+          stage: solution.next,
+          totalScore: overallTotalScore,
         });
 
         return {
           gameId: game.id,
           answer: data.answer,
           puzzle: data.puzzleRef,
-          solutionType: solutionType,
+          solutionType: solution.solutionType,
           hintsUsed: data.hintsUsed,
           hintsPenalty: data.hintsPenalty,
-          next: next,
+          next: solution.next,
           score: score,
           time: data.timeTaken,
           rawScore: rawScore,
           puzzle_TotalScore: score,
-          overall_TotalScore: overallTotalScore
+          overall_TotalScore: overallTotalScore,
         };
-
       } else {
         return {
-          error: 'Wrong answer'
-        }
-      }    
-
+          error: "Wrong answer",
+        };
+      }
     });
   
   /* scoringTextMulti - Test scripts for firebase functions:shell
@@ -157,7 +135,7 @@ export const scoringText = fn
     .https
     .onCall(async (data: scoringInterface) => {
       // log incoming data
-      functions.logger.info(data);
+      logger.info(data);
 
       // get game session data from firestore
       const game = await db.collection(GAME_COLLECTION).doc(data.gameId).get();
@@ -300,7 +278,7 @@ export const scoringGeo = fn
     .https
     .onCall(async (data: scoringGeoInterface) => {
       // log incoming data
-      functions.logger.info(data);
+      logger.info(data);
 
       // get game session data from firestore
       const game = await db.collection(GAME_COLLECTION).doc(data.gameId).get();
@@ -348,7 +326,7 @@ export const scoringGeo = fn
       
       // check for geo distance between user input and solution answer (to move this into a separate module later, e.g., if boolean answer = true then proceed)            
       var correctAnswer = true; // no answer is wrong, just different scores, therefore always true
-      const distInKm = geofire.distanceBetween(data.answer, [answer.latitude, answer.longitude]);
+      const distInKm = geofire.distanceBetween(data.answer as unknown as number[], [answer.latitude, answer.longitude]);
 
       console.log ("Checking for the correct answer => " + data.answer + " is " + distInKm + "km away from " + answer.latitude + ", " + answer.longitude);
 

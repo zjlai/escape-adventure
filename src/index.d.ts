@@ -1,34 +1,31 @@
 export interface puzzleInterface {
-    id: string;
-    uid: string;
-    lang: string;
-    alternate_languages: { [key: string]: string }[];
-    data: {
-        title: {
-            type: string;
-            text: string;
-        };
-        maxScore: number;
-        scoretype: string;
-        solutiontype: string;
-        next: {
-            id: string;
-        };
-        prev: {
-            id: string;
-        };
-        content: {
-            name: string;
-            'content-title': {
-                type: string;
-                text: string;
-            }[];
-            'content-content': {
-                text: string;
-            }[];
-            image: {
-                url: string;
-            };
-        }[];
-    }
+    contentType: string;
+    next: boolean;
+    previous: string;
+    puzzle: {
+        image: string;
+        puzzle: string;
+        puzzleRef: string;
+        puzzleType: string;
+        title: string;
+    };
+    puzzleType: string;
+    storyblocks: {
+        image: string | null;
+        text: string;
+        title: string;
+    }[];
+}
+
+export interface HintsInterface {
+    hintRef: string;
+    totalHints: number;
+    puzzleRef: string;
+    penalties: number[];
+}
+
+export interface HintInterface {
+    hint: string;
+    level: number;
+    penalty: number;
 }
