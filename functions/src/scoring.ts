@@ -1,7 +1,10 @@
 import { firestore } from "firebase-admin";
-import {fn, db, logger, ERROR} from "./index";
+import {fn, logger, ERROR} from "./firebaseInit";
 import { scoringInterface, scoringGeoInterface } from "./scoring.d";
 import * as geofire from "geofire-common";
+import {getFirestore} from "firebase-admin/firestore";
+
+const db = getFirestore();
 /* scoringText - Test scripts for firebase functions:shell
 CORRECT ANSWER (PERFECT SCORE)
 scoringText({gameId: 'Zmbfcdc5yzfoetZr85Ro', puzzleRef: 'puzzleRef', hintsPenalty: 0, answer: '10', hintsUsed: 0, timeTaken: 40})
@@ -20,7 +23,7 @@ scoringText({gameId: 'Zmbfcdc5yzfoetZr85Ro', puzzleRef: 'puzzleRef', hintsPenalt
 const GAME_SOLUTIONS = "solutions";
 const GAME_COLLECTION = "games";
 
-export const scoreAnswer = fn
+export const scoringText = fn
     .https
     .onCall(async (data: scoringInterface) => {
       // log incoming data

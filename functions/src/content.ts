@@ -1,4 +1,4 @@
-import {fn, logger, ERROR} from "./index";
+import {fn, logger, ERROR} from "./firebaseInit";
 import {getFirestore} from "firebase-admin/firestore";
 // Constants
 const CONTENT_COLLECTION = "content";

@@ -1,4 +1,4 @@
-import {fn, logger} from "./index";
+import {fn, logger} from "./firebaseInit";
 import {getFirestore} from "firebase-admin/firestore";
 import {hintInterface} from "./index.d";
 // Constants
