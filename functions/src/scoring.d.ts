@@ -1,3 +1,5 @@
+import { firestore } from 'firebase-admin';
+
 export interface scoringInterface {
   gameId: string;
   puzzleRef: string;
@@ -16,4 +18,13 @@ export interface solutionInterface {
   next: string;
   timed: boolean;
   solutionType: string;
+}
+
+export interface scoringGeoInterface {
+  gameId: string;
+  puzzleRef: string;  
+  hintsUsed: number;
+  answer: firestore.GeoPoint;
+  timeTaken: number;
+  hintsPenalty: number;  
 }
