@@ -33,6 +33,9 @@
               :puzzle="puzzle.puzzle?.puzzle"
               class="q-my-md"
             />
+            <hint-list
+              v-if="section === lastStory && puzzle.contentType !== 'narrative'"
+            />
           </template>
         </story-slide>
       </q-carousel>
@@ -45,7 +48,7 @@
 import { defineComponent, ref , onMounted } from 'vue'
 import StorySlide from 'src/components/game/storySlide.vue'
 import ActionButton from 'src/components/game/actionBtn.vue'
-// import textAnswer from 'src/components/game/solutions/textAns.vue'
+import HintList from 'src/components/hints/hintList.vue'
 import { getContent } from 'src/apis/firebaseApis'
 import { puzzleInterface } from 'src/index'
 
@@ -53,8 +56,8 @@ export default defineComponent({
   name: 'StoryCarousel',
   components: {
     StorySlide,
-    ActionButton
-    // textAnswer
+    ActionButton,
+    HintList
   },
   props: {
     id: {

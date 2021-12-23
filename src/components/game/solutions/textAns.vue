@@ -5,6 +5,7 @@
       filled
       placeholder="Type your answer here"
       class="q-mx-md"
+      :disable="loading"
     >
     </q-input>
     <q-btn
@@ -12,6 +13,7 @@
       @click="validate"
       filled
       color="primary"
+      :loading="loading"
     />
   </div>
 </template>
@@ -21,6 +23,8 @@ import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { scoringText } from 'src/apis/firebaseApis'
 import { validationResponseInterface } from 'src/index'
+import { gameService } from 'src/services/gameService'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'textAnswer',
@@ -30,27 +34,39 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  setup() {
     const answer = ref('')
+    const loading = ref(false)
     const router = useRouter()
+    const { getTime, getHintsUsed, getPenalty, getPuzzleId } = gameService()
+    const $q = useQuasar()
+
     const validate = async () => {
+
       // validate using question ID
-      console.log(props.id)
+      loading.value = true
       const ans = {
         gameId: 'VDAxTTYU6IXuRwUiy9St',
-        puzzleRef: props.id,
-        hintsUsed: 0,
-        answer: answer.value,
-        timeTaken: 60,
-        hintsPenalty: 100
+        puzzleRef: getPuzzleId(),
+        hintsUsed: getHintsUsed(),
+        answer: answer.value.trim().toLowerCase(),
+        timeTaken: getTime(),
+        hintsPenalty: getPenalty()
       }
+      console.log(ans)
       const result = await scoringText(ans)
       const data = result.data as validationResponseInterface
-      await router.push( { name: 'story', params: { storyRef: data.next}})
+      if (data.next ?? false) {
+        await router.push( { name: 'story', params: { storyRef: data.next}})
+      } else {
+        $q.notify('Wrong answer! Try again or check the hints!')
+      }
+      loading.value = false
     }
     return {
       answer,
-      validate
+      validate,
+      loading
     }
   }
 })

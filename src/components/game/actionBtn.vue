@@ -5,6 +5,7 @@
       v-if="contentType === 'narrative'"
       label="next"
       @click="go"
+      :loading="loading"
     />
     <div v-else-if="contentType === 'singleMatch'">
       <text-ans :id="puzzleId" />
@@ -38,7 +39,9 @@ export default defineComponent({
   setup(props) {
     const router = useRouter()
     const answer = ref('')
+    const loading = ref(false)
     const go = async () => {
+      loading.value = true
       // validate answer
       if (props.contentType === 'narrative') {
         const next = await validateAnswer(props.puzzleId)
@@ -46,10 +49,12 @@ export default defineComponent({
         console.log(data)
         await router.push( { name: 'story', params: { storyRef: data.next}})
       }
+      loading.value = false
     }
     return {
       go,
-      answer
+      answer,
+      loading
     }
   }
 })

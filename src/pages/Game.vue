@@ -17,11 +17,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import StoryCarousel from 'src/components/game/storyCarousel.vue'
-// import HintList from 'src/components/hints/hintList.vue'
 import Timer from 'src/components/timer.vue'
 import { useRoute } from 'vue-router'
+import { gameService } from 'src/services/gameService'
 
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
@@ -34,12 +34,11 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute()
-    // Reference Code
-    // onMounted(async () => {
-    //   console.log('data')
-    //   const data = await getContent(route.params.storyRef)
-    //   console.log(data.data)
-    // })
+    const { reset, setPuzzleId } = gameService()
+    onMounted(() => {
+      reset()
+      setPuzzleId(route.params.storyRef as string)
+    })
     return {
       gameId: computed(() => route.params.storyRef)
       // puzzle: computed(() => puzzle)
