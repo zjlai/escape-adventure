@@ -31,7 +31,6 @@ module.exports = configure(function (ctx) {
     boot: [
       'i18n',
       'axios',
-      'prismic',
       'firebase'
     ],
 
@@ -93,7 +92,16 @@ module.exports = configure(function (ctx) {
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
-      config: {},
+      config: {
+        notify: {
+          type: 'info',
+          color: 'info',
+          textColor: 'black',
+          position: 'center',
+          timeout: 3000,
+          closeBtn: true
+        }
+      },
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
@@ -106,7 +114,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Notify']
     },
 
     // animations: 'all', // --- includes all animations

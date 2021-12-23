@@ -1,29 +1,46 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <div class="col text-center">
-      <game-title title="Escape from King Herod" />
-      <story-carousel :id="gameId" />
+  <q-page class="col" :key="gameId">
+    <div class="row">
+      <q-space />
+      <div class="text-overline q-ma-md">
+        Game ID: id
+      </div>
+      <timer class="q-ma-md" />
+    </div>
+    <div class="row items-center justify-evenly fit">
+      <div class="col text-center fit">
+        <story-carousel :id="gameId" :key="gameId" class="fit" />
+        <!-- <hint-list /> -->
+      </div>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
-import GameTitle from 'src/components/game/title.vue'
+import { defineComponent, computed, onMounted } from 'vue'
 import StoryCarousel from 'src/components/game/storyCarousel.vue'
+import Timer from 'src/components/timer.vue'
 import { useRoute } from 'vue-router'
-// import { apiService } from 'src/apis/prismicApis'
+import { gameService } from 'src/services/gameService'
+
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 
 export default defineComponent({
   name: 'GamePage',
   components: {
-    GameTitle,
-    StoryCarousel
+    StoryCarousel,
+    Timer
+    // HintList
   },
   setup() {
     const route = useRoute()
+    const { reset, setPuzzleId } = gameService()
+    onMounted(() => {
+      reset()
+      setPuzzleId(route.params.storyRef as string)
+    })
     return {
-      gameId: computed(() => route.params.puzzleId)
+      gameId: computed(() => route.params.storyRef)
       // puzzle: computed(() => puzzle)
     }
   }
