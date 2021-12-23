@@ -15,9 +15,10 @@ export const createGame = fn
       logger.info(data);
 
       // write to firestore
-      await db.collection(GAME_COLLECTION).add(data);
+      const doc = await db.collection(GAME_COLLECTION).add(data);
 
       return {
+        gameId: doc.id,
         startPuzzle: START_PUZZLE,
       };
     });

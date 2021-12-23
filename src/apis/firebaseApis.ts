@@ -5,16 +5,17 @@ const functions = getFunctions(app, 'asia-northeast1')
 
 const createGame = httpsCallable(functions, 'createGame')
 const getPuzzle = httpsCallable(functions, 'getPuzzle')
-const scoreAnwer = httpsCallable(functions, 'scoreAnswer')
+const scoreAnswer = httpsCallable(functions, 'scoreAnswer')
 const getHint = httpsCallable(functions, 'getHint')
 const getHints = httpsCallable(functions, 'getHints')
 const getContent = httpsCallable(functions, 'getContent')
 const validateAnswer = httpsCallable(functions, 'validateAnswer')
 const scoringText = httpsCallable(functions, 'scoringText')
+
 export {
   createGame,
   getPuzzle,
-  scoreAnwer,
+  scoreAnswer,
   getHints,
   getHint,
   getContent,
