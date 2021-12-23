@@ -1,37 +1,43 @@
 <template>
-  <div class="row justify-center align-center q-pa-lg">
-    <q-carousel
-      keep-alive
-      animated
-      swipeable
-      vertical
-      padding
-      arrows
-      navigation
-      navigation-icon="radio_button_unchecked"
-      v-model="section"
-      control-color="black"
-      control-text-color="black"
-      height="100%"
-      style="max-width:960px;"
-      v-if="puzzle"
-    >
-      <story-slide
-        v-for="slide in puzzle.storyblocks"
-        :key="slide.title"
-        :name="slide.title"
-        :title="slide.title"
-        :src="slide.image"
-        :content="slide.text"
-        class="column no-wrap flex-center fit"
-      />
-    </q-carousel>
-    <!-- <text-answer v-if="puzzle && puzzle.data.solutiontype === 'text'" :id="id" /> -->
-    <action-button
-      v-if="section === lastStory"
-      :contentType="puzzle.contentType"
-      :next="puzzle.next"
-    />
+  <div class="row justify-center align-center">
+    <div>
+      <q-carousel
+        keep-alive
+        animated
+        swipeable
+        vertical
+        padding
+        arrows
+        navigation
+        v-model="section"
+        control-color="black"
+        control-text-color="black"
+        height="100%"
+        style="max-width:960px;"
+        v-if="puzzle"
+      >
+        <story-slide
+          v-for="slide in puzzle.storyblocks"
+          :key="slide.title"
+          :name="slide.title"
+          :title="slide.title"
+          :src="slide.image"
+          :content="slide.text"
+          class="column no-wrap flex-center fit"
+        >
+          <template v-slot:action>
+            <action-button
+              v-if="section === lastStory"
+              :contentType="puzzle.contentType"
+              :puzzleId="id"
+              :puzzle="puzzle.puzzle?.puzzle"
+              class="q-my-md"
+            />
+          </template>
+        </story-slide>
+      </q-carousel>
+      <!-- <text-answer v-if="puzzle && puzzle.data.solutiontype === 'text'" :id="id" /> -->
+    </div>
   </div>
 </template>
 

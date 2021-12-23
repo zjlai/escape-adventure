@@ -1,9 +1,5 @@
 <template>
-  <q-card :flat="flat" :bordered="bordered" class="timer">
-    <q-card-section>
-      <p class="text-h4 q-pa-md q-ma-md">{{ time }}</p>
-    </q-card-section>
-  </q-card>
+  <p class="text-overline">Timer: {{ time }}</p>
 </template>
 
 <script lang="ts">

@@ -29,3 +29,7 @@ export interface HintInterface {
     level: number;
     penalty: number;
 }
+
+export interface validationResponseInterface {
+    next: string;
+}

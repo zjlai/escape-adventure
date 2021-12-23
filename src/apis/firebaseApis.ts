@@ -9,12 +9,15 @@ const scoreAnwer = httpsCallable(functions, 'scoreAnswer')
 const getHint = httpsCallable(functions, 'getHint')
 const getHints = httpsCallable(functions, 'getHints')
 const getContent = httpsCallable(functions, 'getContent')
-
+const validateAnswer = httpsCallable(functions, 'validateAnswer')
+const scoringText = httpsCallable(functions, 'scoringText')
 export {
   createGame,
   getPuzzle,
   scoreAnwer,
   getHints,
   getHint,
-  getContent
+  getContent,
+  validateAnswer,
+  scoringText
 }

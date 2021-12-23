@@ -14,6 +14,8 @@
       width="70%"
     />
     <div class="q-mt-md text-center" v-html="content" />
+    <slot name="action">
+    </slot>
   </q-carousel-slide>
 </template>
 

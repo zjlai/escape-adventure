@@ -97,18 +97,7 @@ export const scoringText = fn
         });
 
         return {
-          gameId: game.id,
-          answer: data.answer,
-          puzzle: data.puzzleRef,
-          solutionType: solution.solutionType,
-          hintsUsed: data.hintsUsed,
-          hintsPenalty: data.hintsPenalty,
           next: solution.next,
-          score: score,
-          time: data.timeTaken,
-          rawScore: rawScore,
-          puzzle_TotalScore: score,
-          overall_TotalScore: overallTotalScore,
         };
       } else {
         return {

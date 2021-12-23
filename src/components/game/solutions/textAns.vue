@@ -19,6 +19,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { scoringText } from 'src/apis/firebaseApis'
+import { validationResponseInterface } from 'src/index'
 
 export default defineComponent({
   name: 'textAnswer',
@@ -30,12 +32,21 @@ export default defineComponent({
   },
   setup(props) {
     const answer = ref('')
+    const router = useRouter()
     const validate = async () => {
       // validate using question ID
       console.log(props.id)
-      const router = useRouter()
-
-      if (true) await router.push({ name: 'game', params: { id: 'nextpuzzleID' }})
+      const ans = {
+        gameId: 'VDAxTTYU6IXuRwUiy9St',
+        puzzleRef: props.id,
+        hintsUsed: 0,
+        answer: answer.value,
+        timeTaken: 60,
+        hintsPenalty: 100
+      }
+      const result = await scoringText(ans)
+      const data = result.data as validationResponseInterface
+      await router.push( { name: 'story', params: { storyRef: data.next}})
     }
     return {
       answer,
