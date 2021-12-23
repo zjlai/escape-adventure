@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: >-
-          rm -rf node_modules && yarn install --frozen-lockfile && npx quasar
+          rm -rf node_modules && rm -rf functions && yarn install --frozen-lockfile && npx quasar
           build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
